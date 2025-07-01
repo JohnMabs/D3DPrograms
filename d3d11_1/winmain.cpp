@@ -92,15 +92,19 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
     // Main message loop  
     MSG msg = { };  
-    while (GetMessage(&msg, NULL, 0, 0)) {  
-        TranslateMessage(&msg);  
-        DispatchMessage(&msg);  
+    while (true) {  
+        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {  
+            if (msg.message == WM_QUIT)  
+                break;  
+            TranslateMessage(&msg);  
+            DispatchMessage(&msg);  
+        }  
 
         // Clear the back buffer  
         float clearColor[4] = { 0.0f, 0.2f, 0.4f, 1.0f }; // RGBA  
         deviceContext->ClearRenderTargetView(renderTargetView, clearColor);  
 
-        // Present the information rendered to the back buffer to the front buffer (the screen)  
+        // Présente le rendu à l'écran  
         swapChain->Present(1, 0);  
     }  
 
